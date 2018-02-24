@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,10 +19,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener,
         LoaderManager.LoaderCallbacks<List<Movie>> {
 
-    public static final String ITEM_INDEX = "item_index";
+    public static final String ITEM_MOVIE = "item_movie";
     private static final String POPULAR_STATE = "popular_state";
 
     private static final int MoviesLoaderID = 3;
+    private List<Movie> moviesList = new ArrayList<>(20);
 
     private MoviesAdapter adapter;
     private ProgressBar progressBar;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         adapter = new MoviesAdapter(this, new ArrayList<Movie>(), this);
         recyclerView.setAdapter(adapter);
 
-        adapter = new MoviesAdapter(this, NetworkUtils.moviesList, this);
+        adapter = new MoviesAdapter(this, moviesList, this);
         recyclerView.setAdapter(adapter);
 
         getSupportLoaderManager().initLoader(MoviesLoaderID, null, this).forceLoad();
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     @Override
     public void onListItemClick(int clickItemIndex) {
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(ITEM_INDEX, clickItemIndex);
+        intent.putExtra(ITEM_MOVIE,moviesList.get(clickItemIndex));
         startActivity(intent);
     }
 
@@ -137,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     @Override
     public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
-        NetworkUtils.moviesList = data;
-        adapter.setData(NetworkUtils.moviesList);
+        moviesList = data;
+        adapter.setData(moviesList);
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
     }

@@ -44,10 +44,8 @@ class NetworkUtils {
     private static final String KEY_LABEL = "api_key";
 
     // TODO: 24.02.2018 API Key
-    private static final String API_KEY = "*********************************";
+    private static final String API_KEY = "*****************************";
 
-
-    static List<Movie> moviesList = new ArrayList<>();
 
     static Uri getImageUri(String imageId) {
 

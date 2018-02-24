@@ -27,10 +27,8 @@ public class DetailActivity extends AppCompatActivity {
         ImageView poster = findViewById(R.id.detail_poster_IW);
 
 
-        if (getIntent().hasExtra(MainActivity.ITEM_INDEX)) {
-            int i = getIntent().getIntExtra(MainActivity.ITEM_INDEX, 0);
-
-            Movie movie = NetworkUtils.moviesList.get(i);
+        if (getIntent().hasExtra(MainActivity.ITEM_MOVIE)) {
+            Movie movie = getIntent().getParcelableExtra(MainActivity.ITEM_MOVIE);
 
             title.setText(movie.getTitle());
             synopsis.setText(movie.getPlotSynopsis());
