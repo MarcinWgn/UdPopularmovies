@@ -1,62 +1,144 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
-        import android.os.AsyncTask;
+        import android.content.Intent;
+        import android.support.v4.app.LoaderManager;
+        import android.support.v4.content.Loader;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.support.v7.widget.GridLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.util.Log;
-        import java.lang.ref.WeakReference;
+        import android.view.Menu;
+        import android.view.MenuInflater;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.widget.ProgressBar;
 
-public class MainActivity extends AppCompatActivity {
+        import java.util.ArrayList;
+        import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener,
+        LoaderManager.LoaderCallbacks<List<Movie>>{
 
     private final static String TAG = MainActivity.class.getSimpleName();
 
-    MoviesAdapter adapter;
-    RecyclerView recyclerView;
+    public static final String ITEM_INDEX = "item_index";
+    public static final String POPULAR_STATE = "popular_state";
+
+    private static final int MoviesLoaderID = 3;
+
+    private MoviesAdapter adapter;
+    private ProgressBar progressBar;
+
+    private boolean popular;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState!= null){
+            popular = savedInstanceState.getBoolean(POPULAR_STATE);
+        }
+        Log.d(TAG,"popular: "+ popular);
 
-        new TestTask(this).execute();
-
-        recyclerView = findViewById(R.id.recycler_view);
+        progressBar = findViewById(R.id.progress);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
+
+
 
         RecyclerView.LayoutManager mLayoutManager =
                 new GridLayoutManager(this,getResources().getInteger(R.integer.column_size));
         recyclerView.setLayoutManager(mLayoutManager);
 
+        adapter = new MoviesAdapter(this,new ArrayList<Movie>(),this);
+        recyclerView.setAdapter(adapter);
+
+        adapter = new MoviesAdapter(this,NetworkUtils.moviesList,this);
+        recyclerView.setAdapter(adapter);
+
+        getSupportLoaderManager().initLoader(MoviesLoaderID,null,this).forceLoad();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+       switch(item.getItemId()){
+           case R.id.popular_menu_id:
+               selectPopular();
+               return true;
+           case R.id.top_trated_menu_id:
+               selectTop();
+               return true;
+           default:  return super.onOptionsItemSelected(item);
+       }
+
+    }
+
+    private void selectTop (){
+            popular = false;
+            getSupportLoaderManager().restartLoader(MoviesLoaderID,null,this).forceLoad();
+            Log.d(TAG,"Top");
+    }
+    private void selectPopular(){
+            popular = true;
+            getSupportLoaderManager().restartLoader(MoviesLoaderID,null,this).forceLoad();
+            Log.d(TAG,"Popular");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(POPULAR_STATE,popular);
+    }
+
+    @Override
+    public void onListItemClick(int clickItemIndex) {
+        Intent intent = new Intent(this,DetailActivity.class);
+        intent.putExtra(ITEM_INDEX,clickItemIndex);
+        startActivity(intent);
+    }
+
+    @Override
+    public Loader<List<Movie>> onCreateLoader(int id, Bundle args) {
+
+        progressBar.setVisibility(View.VISIBLE);
+        Log.d(TAG,"onCreateLoader");
+        if(popular) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.popular));
+            return new MoviesLoader(this,NetworkUtils.POPULAR_QUERY);
+        }
+        else {
+            getSupportActionBar().setTitle(getResources().getString(R.string.top_rated));
+            return new MoviesLoader(this,NetworkUtils.TOP_RATED_QUERY);
+        }
     }
 
 
-     private static class TestTask extends AsyncTask<Void,Void,Void> {
-
-        private WeakReference<MainActivity> reference;
-
-         TestTask(MainActivity context) {
-             reference = new WeakReference<>(context);
-         }
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            NetworkUtils.getListFromHttp(NetworkUtils.POPULAR_QUERY);
-
-            Log.d(NetworkUtils.TAG,NetworkUtils.moviesList.get(0).getTitle());
-            Log.d(NetworkUtils.TAG,NetworkUtils.moviesList.get(0).getPosterLocalization());
-            Log.d(NetworkUtils.TAG,NetworkUtils.moviesList.get(0).getVoteAverage());
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-
-            reference.get().adapter = new MoviesAdapter(reference.get(),NetworkUtils.moviesList);
-            reference.get().recyclerView.setAdapter(reference.get().adapter);
-        }
+    @Override
+    public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
+        NetworkUtils.moviesList = data;
+        adapter.setData(NetworkUtils.moviesList);
+        adapter.notifyDataSetChanged();
+        progressBar.setVisibility(View.GONE);
+        Log.d(TAG,"onLoadFinished");
     }
+
+    @Override
+    public void onLoaderReset(Loader<List<Movie>> loader) {
+
+    }
+
 }

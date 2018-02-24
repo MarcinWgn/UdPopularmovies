@@ -45,7 +45,7 @@ import java.util.Scanner;
     static final String TOP_RATED_QUERY = "top_rated";
 
     private static final String KEY_LABEL = "api_key";
-    private static final String API_KEY = "********************************";
+    private static final String API_KEY = "**********************************";
 
 
     static final String EXAMPLE_IMAGE = "\\/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg";
@@ -53,7 +53,7 @@ import java.util.Scanner;
 
 
 
-    static List<Movie> moviesList;
+    static List<Movie> moviesList = new ArrayList<>();
 
      static Uri getImageUri(String imageId){
 
@@ -61,19 +61,14 @@ import java.util.Scanner;
         builder.scheme(SCHEME);
         builder.authority(IMAGE_AUTHORITY);
         builder.path(IMAGE_PATH);
-        builder.appendPath(IMAGE_SIZE_342);
+        builder.appendPath(IMAGE_SIZE_185);
         builder.appendEncodedPath(imageId);
         Log.d(TAG,builder.toString());
         return builder.build();
 
     }
 
-    static void getListFromHttp(String query){
-        String jsonString = NetworkUtils.queryUrl(query);
-        moviesList = NetworkUtils.parseResultsJson(jsonString);
-    }
-
-    private static String queryUrl(String query){
+    static String queryUrl(String query){
 
          Uri.Builder builder = new Uri.Builder();
          builder.scheme(SCHEME);
@@ -123,7 +118,7 @@ import java.util.Scanner;
         }
     }
 
-    private static List<Movie> parseResultsJson(String jsonString){
+    static List<Movie> parseResultsJson(String jsonString){
         if(jsonString != null && !jsonString.isEmpty()){
             try {
 
