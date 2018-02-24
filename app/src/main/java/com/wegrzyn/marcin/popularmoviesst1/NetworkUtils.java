@@ -1,6 +1,7 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ class NetworkUtils {
     private static final String KEY_LABEL = "api_key";
 
     // TODO: 24.02.2018 API Key
-    private static final String API_KEY = "*****************************";
+    private static final String API_KEY = BuildConfig.API_KEY;
 
 
     static Uri getImageUri(String imageId) {
