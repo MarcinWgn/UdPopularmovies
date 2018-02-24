@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         LoaderManager.LoaderCallbacks<List<Movie>> {
 
     public static final String ITEM_INDEX = "item_index";
-    private final static String TAG = MainActivity.class.getSimpleName();
     private static final String POPULAR_STATE = "popular_state";
 
     private static final int MoviesLoaderID = 3;
@@ -40,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         if (savedInstanceState != null) {
             popular = savedInstanceState.getBoolean(POPULAR_STATE);
         }
-        Log.d(TAG, "popular: " + popular);
+
+
 
         progressBar = findViewById(R.id.progress);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         recyclerView.setAdapter(adapter);
 
         getSupportLoaderManager().initLoader(MoviesLoaderID, null, this).forceLoad();
+
+        setActionBarText();
     }
 
     @Override
@@ -88,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private void selectTop() {
         popular = false;
         getSupportLoaderManager().restartLoader(MoviesLoaderID, null, this).forceLoad();
-        Log.d(TAG, "Top");
+        setActionBarText();
     }
 
     private void selectPopular() {
         popular = true;
         getSupportLoaderManager().restartLoader(MoviesLoaderID, null, this).forceLoad();
-        Log.d(TAG, "Popular");
+        setActionBarText();
     }
 
     @Override
@@ -114,18 +116,24 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     public Loader<List<Movie>> onCreateLoader(int id, Bundle args) {
 
         progressBar.setVisibility(View.VISIBLE);
-        Log.d(TAG, "onCreateLoader");
         if (popular) {
-            if (getSupportActionBar() != null)
-                getSupportActionBar().setTitle(getResources().getString(R.string.popular));
             return new MoviesLoader(this, NetworkUtils.POPULAR_QUERY);
         } else {
-            if (getSupportActionBar() != null)
-                getSupportActionBar().setTitle(getResources().getString(R.string.top_rated));
             return new MoviesLoader(this, NetworkUtils.TOP_RATED_QUERY);
         }
     }
 
+    private void setActionBarText() {
+        if (popular) {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(getResources().getString(R.string.popular));
+            }
+        }else {
+            if (getSupportActionBar() != null){
+                getSupportActionBar().setTitle(getResources().getString(R.string.top_rated));
+            }
+        }
+    }
 
     @Override
     public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
@@ -133,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         adapter.setData(NetworkUtils.moviesList);
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
-        Log.d(TAG, "onLoadFinished");
     }
 
     @Override

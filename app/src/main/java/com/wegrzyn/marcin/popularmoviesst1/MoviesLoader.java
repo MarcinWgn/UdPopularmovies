@@ -26,7 +26,6 @@ class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
     @Override
     public List<Movie> loadInBackground() {
 
-        Log.d(NetworkUtils.TAG, "loadInBackground");
         if (queryType == null) return null;
 
         String jsonString = NetworkUtils.queryUrl(queryType);

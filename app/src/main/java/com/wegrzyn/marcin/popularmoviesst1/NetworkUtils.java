@@ -44,7 +44,7 @@ class NetworkUtils {
     private static final String KEY_LABEL = "api_key";
 
     // TODO: 24.02.2018 API Key
-    private static final String API_KEY = "************************************";
+    private static final String API_KEY = "*********************************";
 
 
     static List<Movie> moviesList = new ArrayList<>();
@@ -57,7 +57,6 @@ class NetworkUtils {
         builder.path(IMAGE_PATH);
         builder.appendPath(IMAGE_SIZE_185);
         builder.appendEncodedPath(imageId);
-        Log.d(TAG, builder.toString());
         return builder.build();
 
     }
@@ -71,7 +70,6 @@ class NetworkUtils {
         builder.appendPath(query);
         builder.appendQueryParameter(KEY_LABEL, API_KEY);
 
-        Log.d(TAG, builder.toString());
 
         URL urlQuery = createURL(builder.toString());
         try {
