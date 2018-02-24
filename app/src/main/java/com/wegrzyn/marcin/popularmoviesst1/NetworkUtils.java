@@ -2,6 +2,7 @@ package com.wegrzyn.marcin.popularmoviesst1;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,41 +22,35 @@ import java.util.Scanner;
  * wireamg@gmail.com
  */
 
- class NetworkUtils {
+class NetworkUtils {
 
     static final String TAG = NetworkUtils.class.getSimpleName();
-
+    static final String POPULAR_QUERY = "popular";
+    static final String TOP_RATED_QUERY = "top_rated";
+    static final int TARGET_WIDTH = 400;
+    static final int TARGET_HEIGHT = 600;
     private static final String SCHEME = "http";
-
     private static final String IMAGE_AUTHORITY = "image.tmdb.org";
     private static final String IMAGE_PATH = "t/p";
     private static final String IMAGE_SIZE_185 = "w185";
     private static final String IMAGE_SIZE_342 = "w342";
-
     private static final String TITLE = "title";
     private static final String RELEASE_DATE = "release_date";
     private static final String POSTER_PATH = "poster_path";
     private static final String VOTE_AVERAGE = "vote_average";
     private static final String OVERVIEW = "overview";
-
     private static final String AUTHORITY = "api.themoviedb.org";
     private static final String PATH = "3/movie";
-
-    static final String POPULAR_QUERY = "popular";
-    static final String TOP_RATED_QUERY = "top_rated";
-
     private static final String KEY_LABEL = "api_key";
-    private static final String API_KEY = "**********************************";
 
 
-    static final String EXAMPLE_IMAGE = "\\/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg";
-    static final String EXAMPLE_IMAGE2 = "\\/6xKCYgH16UuwEGAyroLU6p8HLIn.jpg";
-
+    // TODO: 24.02.2018 API KEY insert
+    private static final String API_KEY = "*******************************";
 
 
     static List<Movie> moviesList = new ArrayList<>();
 
-     static Uri getImageUri(String imageId){
+    static Uri getImageUri(String imageId) {
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEME);
@@ -63,23 +58,23 @@ import java.util.Scanner;
         builder.path(IMAGE_PATH);
         builder.appendPath(IMAGE_SIZE_185);
         builder.appendEncodedPath(imageId);
-        Log.d(TAG,builder.toString());
+        Log.d(TAG, builder.toString());
         return builder.build();
 
     }
 
-    static String queryUrl(String query){
+    static String queryUrl(String query) {
 
-         Uri.Builder builder = new Uri.Builder();
-         builder.scheme(SCHEME);
-         builder.authority(AUTHORITY);
-         builder.path(PATH);
-         builder.appendPath(query);
-         builder.appendQueryParameter(KEY_LABEL,API_KEY);
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(SCHEME);
+        builder.authority(AUTHORITY);
+        builder.path(PATH);
+        builder.appendPath(query);
+        builder.appendQueryParameter(KEY_LABEL, API_KEY);
 
-         Log.d(TAG,builder.toString());
+        Log.d(TAG, builder.toString());
 
-         URL urlQuery = createURL(builder.toString());
+        URL urlQuery = createURL(builder.toString());
         try {
             return getResponseFromUrl(urlQuery);
         } catch (IOException e) {
@@ -89,17 +84,17 @@ import java.util.Scanner;
     }
 
     private static URL createURL(String stringUrl) {
-      URL url = null;
-      try {
-         url = new URL(stringUrl);
-      } catch (MalformedURLException e) {
-         Log.e(TAG, "Error url creation ", e);
-      }
-      return url;
-   }
+        URL url = null;
+        try {
+            url = new URL(stringUrl);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "Error url creation ", e);
+        }
+        return url;
+    }
 
     private static String getResponseFromUrl(URL url) throws IOException {
-       HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
         try {
             InputStream in = httpURLConnection.getInputStream();
@@ -118,20 +113,20 @@ import java.util.Scanner;
         }
     }
 
-    static List<Movie> parseResultsJson(String jsonString){
-        if(jsonString != null && !jsonString.isEmpty()){
+    static List<Movie> parseResultsJson(String jsonString) {
+        if (jsonString != null && !jsonString.isEmpty()) {
             try {
 
                 JSONObject sandwichJSONObject = new JSONObject(jsonString);
 
-                if(sandwichJSONObject.has("results")){
+                if (sandwichJSONObject.has("results")) {
 
                     JSONArray results = sandwichJSONObject.getJSONArray("results");
                     return jsonArrayToList(results);
 
-                }else return null;
+                } else return null;
             } catch (JSONException e) {
-                Log.e(TAG,"Error parse",e.getCause());
+                Log.e(TAG, "Error parse", e.getCause());
             }
         }
         return null;
@@ -139,10 +134,10 @@ import java.util.Scanner;
 
     private static List<Movie> jsonArrayToList(JSONArray array) {
 
-        int lenght = array.length();
-        List<Movie> moviesList = new ArrayList<>(lenght);
+        int length = array.length();
+        List<Movie> moviesList = new ArrayList<>(length);
 
-        for (int i = 0; i < lenght; i++) {
+        for (int i = 0; i < length; i++) {
             try {
                 String title = array.getJSONObject(i).getString(TITLE);
                 String releaseDate = array.getJSONObject(i).getString(RELEASE_DATE);
@@ -150,7 +145,7 @@ import java.util.Scanner;
                 String voteAverage = array.getJSONObject(i).getString(VOTE_AVERAGE);
                 String plotSynopsis = array.getJSONObject(i).getString(OVERVIEW);
 
-                moviesList.add(new Movie(title,releaseDate,posterLocalization,voteAverage,plotSynopsis));
+                moviesList.add(new Movie(title, releaseDate, posterLocalization, voteAverage, plotSynopsis));
 
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());

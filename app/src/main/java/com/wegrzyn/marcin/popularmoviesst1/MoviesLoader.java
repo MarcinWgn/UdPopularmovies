@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import java.awt.font.TextAttribute;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,9 +13,9 @@ import java.util.List;
  * wireamg@gmail.com
  */
 
-public class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
+class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
 
-    private String queryType;
+    private final String queryType;
 
     MoviesLoader(@NonNull Context context, String queryType) {
         super(context);
@@ -28,11 +26,10 @@ public class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
     @Override
     public List<Movie> loadInBackground() {
 
-        Log.d(NetworkUtils.TAG,"loadInBackground");
-        if(queryType==null)return null;
+        Log.d(NetworkUtils.TAG, "loadInBackground");
+        if (queryType == null) return null;
 
         String jsonString = NetworkUtils.queryUrl(queryType);
-
 
         return NetworkUtils.parseResultsJson(jsonString);
     }

@@ -6,7 +6,7 @@
         android:title="@string/popular"
         app:showAsAction="never" />
     <item
-        android:id="@+id/top_trated_menu_id"
+        android:id="@+id/top_rated_menu_id"
         android:title="@string/top_rated"
         app:showAsAction="never" />
 

@@ -11,32 +11,30 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.*;
+
 /**
  * Created by Marcin Węgrzyn on 21.02.2018.
  * wireamg@gmail.com
  */
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>{
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
-    private List<Movie> listMovie;
-    private Context context;
+    private final Context context;
     final private ListItemClickListener itemClickListener;
+    private List<Movie> listMovie;
 
-    public interface ListItemClickListener {
-        void onListItemClick(int clickItemIndex);
-    }
-
-     MoviesAdapter(Context context, List<Movie> listMovie, ListItemClickListener itemClickListener) {
+    MoviesAdapter(Context context, List<Movie> listMovie, ListItemClickListener itemClickListener) {
 
         this.listMovie = listMovie;
         this.context = context;
         this.itemClickListener = itemClickListener;
-     }
+    }
 
     @Override
     public MoviesAdapter.MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
 
         return new MoviesViewHolder(view);
     }
@@ -45,19 +43,28 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public void onBindViewHolder(MoviesViewHolder holder, int position) {
 
         Picasso.with(context)
-                .load(NetworkUtils.getImageUri(listMovie.get(position).getPosterLocalization()))
-                .resize(400,600)
+                .load(getImageUri(listMovie.get(position).getPosterLocalization()))
+                .resize(TARGET_WIDTH, TARGET_HEIGHT)
                 .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return listMovie.size();
+        if (listMovie == null) return 0;
+        else return listMovie.size();
     }
 
-     class MoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void setData(List<Movie> listMovie) {
+        this.listMovie = listMovie;
+    }
 
-        ImageView imageView;
+    public interface ListItemClickListener {
+        void onListItemClick(int clickItemIndex);
+    }
+
+    class MoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        final ImageView imageView;
 
         MoviesViewHolder(View view) {
             super(view);
@@ -65,13 +72,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             view.setOnClickListener(this);
         }
 
-         @Override
-         public void onClick(View v) {
-             itemClickListener.onListItemClick(getAdapterPosition());
-         }
-     }
-
-     public void setData(List<Movie> listMovie){
-        this.listMovie = listMovie;
-     }
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onListItemClick(getAdapterPosition());
+        }
+    }
 }

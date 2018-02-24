@@ -5,15 +5,15 @@ package com.wegrzyn.marcin.popularmoviesst1;
  * wireamg@gmail.com
  */
 
- class Movie {
+class Movie {
 
-    private String title;
-    private String releaseDate;
-    private String posterLocalization;
-    private String voteAverage;
-    private String plotSynopsis;
+    private final String title;
+    private final String releaseDate;
+    private final String posterLocalization;
+    private final String voteAverage;
+    private final String plotSynopsis;
 
-     Movie(String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
+    Movie(String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
         this.title = title;
         this.releaseDate = releaseDate;
         this.posterLocalization = posterLocalization;
@@ -21,21 +21,21 @@ package com.wegrzyn.marcin.popularmoviesst1;
         this.plotSynopsis = plotSynopsis;
     }
 
-   public String getTitle() {
-      return title;
-   }
+    public String getTitle() {
+        return title;
+    }
 
-   public String getReleaseDate() { return releaseDate; }
+    public String getReleaseDate() { return releaseDate; }
 
-   public String getPosterLocalization() {
-      return posterLocalization;
-   }
+    public String getPosterLocalization() {
+        return posterLocalization;
+    }
 
-   public String getVoteAverage() {
-      return voteAverage;
-   }
+    public String getVoteAverage() {
+        return voteAverage;
+    }
 
-   public String getPlotSynopsis() {
-      return plotSynopsis;
-   }
+    public String getPlotSynopsis() {
+        return plotSynopsis;
+    }
 }
