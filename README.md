@@ -1,4 +1,4 @@
-# UdpopularmoviesSt1
+# Udpopularmovies
 Udacity course project
 
 To access the themoviedb site, it is necessary to obtain the key api, which should be placed in NetworkUtil.class marked by TODO
