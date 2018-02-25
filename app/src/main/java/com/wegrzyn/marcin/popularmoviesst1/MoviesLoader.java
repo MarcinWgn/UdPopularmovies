@@ -22,6 +22,11 @@ class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
         this.queryType = queryType;
     }
 
+    @Override
+    protected void onStartLoading() {
+        forceLoad();
+    }
+
     @Nullable
     @Override
     public List<Movie> loadInBackground() {

@@ -1,7 +1,7 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
+
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -150,4 +150,5 @@ class NetworkUtils {
         }
         return moviesList;
     }
+
 }
