@@ -3,4 +3,7 @@
     <string name="movie_poster">Movie poster</string>
     <string name="popular">Popular Movies</string>
     <string name="top_rated">Top Rated Movies</string>
+    <string name="no_internet">has no internet connections !!!</string>
+    <string name="trailers">Trailers:</string>
+    <string name="play_button">play button</string>
 </resources>

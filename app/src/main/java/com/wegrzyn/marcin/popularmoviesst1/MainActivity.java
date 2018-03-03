@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
             popular = savedInstanceState.getBoolean(POPULAR_STATE);
         }
 
-        Log.d(TAG, String.valueOf(isInternetConnections()));
-
-
         progressBar = findViewById(R.id.progress);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -58,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         RecyclerView.LayoutManager mLayoutManager =
                 new GridLayoutManager(this, getResources().getInteger(R.integer.column_size));
         recyclerView.setLayoutManager(mLayoutManager);
-
-        adapter = new MoviesAdapter(this, new ArrayList<Movie>(), this);
-        recyclerView.setAdapter(adapter);
 
         adapter = new MoviesAdapter(this, moviesList, this);
         recyclerView.setAdapter(adapter);
@@ -158,9 +152,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Movie>> loader) {
-
-    }
+    public void onLoaderReset(Loader<List<Movie>> loader) { }
 
      boolean isInternetConnections(){
         boolean connection = false;
@@ -169,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         assert cm != null;
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         connection  = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        if(!connection)Toast.makeText(this,"has no internet connections !!!",Toast.LENGTH_LONG).show();
+        if(!connection)Toast.makeText(this, R.string.no_internet,Toast.LENGTH_LONG).show();
         return connection;
     }
 

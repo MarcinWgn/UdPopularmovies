@@ -32,9 +32,6 @@ class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
     public List<Movie> loadInBackground() {
 
         if (queryType == null) return null;
-
-        String jsonString = NetworkUtils.queryUrl(queryType);
-
-        return NetworkUtils.parseResultsJson(jsonString);
+        return NetworkUtils.queryMovies(queryType);
     }
 }
