@@ -3,7 +3,6 @@ package com.wegrzyn.marcin.popularmoviesst1;
 import android.content.Context;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,20 +20,22 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     private List<Trailer> trailerList;
     private final Context context;
 
+    private final ListItemClickListener mItemClickListener;
 
-    TrailersAdapter(List<Trailer> trailerList, Context context) {
+    public interface ListItemClickListener{
+        void onListItemClick(int clickItem);
+    }
+
+
+    TrailersAdapter(List<Trailer> trailerList, Context context, ListItemClickListener mItemClickListener) {
         this.trailerList = trailerList;
         this.context = context;
-
+        this.mItemClickListener = mItemClickListener;
     }
 
     @Override
     public TrailersAdapter.TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
         View view = LayoutInflater.from(context).inflate(R.layout.item_trailer,parent,false);
-
-        Log.d(NetworkUtils.TAG,"################################################################");
         return new TrailerViewHolder(view);
     }
 
@@ -49,14 +50,19 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         else return trailerList.size();
     }
 
-    class TrailerViewHolder extends RecyclerView.ViewHolder {
+    class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView title;
 
         TrailerViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.item_trailer_title_tv);
+            itemView.setOnClickListener(this);
+        }
 
+        @Override
+        public void onClick(View v) {
+            mItemClickListener.onListItemClick(getAdapterPosition());
         }
     }
     public void setData(List<Trailer> trailerList){

@@ -14,4 +14,10 @@
         <item name="android:textStyle">bold|italic</item>
     </style>
 
+    <style name="LineHorizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/colorGreyLight</item>
+    </style>
+
 </resources>

@@ -3,38 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_touch_selector"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/item_trailer_lbel_iv"
+    <TextView
+        android:id="@+id/item_review_author_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:drawable/ic_media_play"
-        android:contentDescription="@string/play_button"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/item_review_content_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/john"
         android:layout_marginLeft="8dp" />
 
     <TextView
-        android:id="@+id/item_trailer_title_tv"
+        android:id="@+id/item_review_content_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:gravity="start"
-        android:textAlignment="textStart"
-        app:layout_constraintBottom_toBottomOf="@+id/item_trailer_lbel_iv"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/item_review_line"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/item_trailer_lbel_iv"
-        app:layout_constraintTop_toTopOf="@+id/item_trailer_lbel_iv"
-        tools:text="Trailer 1"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_review_author_tv"
+        tools:text="@string/lorem" />
 
     <View
-        android:id="@+id/item_trailer_line"
+        android:id="@+id/item_review_line"
         style="@style/LineHorizontal"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -43,6 +45,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_trailer_lbel_iv" />
+        app:layout_constraintTop_toBottomOf="@+id/item_review_content_tv" />
 
 </android.support.constraint.ConstraintLayout>

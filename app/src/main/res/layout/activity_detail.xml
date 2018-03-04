@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -98,52 +98,104 @@
 
         <View
             android:id="@+id/line"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
+            style="@style/LineHorizontal"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:background="@color/colorGreyLight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_poster_IW" />
 
         <View
             android:id="@+id/line_2"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
+            style="@style/LineHorizontal"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorGreyLight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_plot_synopsis_TV" />
 
         <TextView
             android:id="@+id/trailer_label_tv"
+            style="@style/ListLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="@string/trailers"
-            style="@style/ListLabel"
+            app:layout_constraintBottom_toTopOf="@+id/trailer_recyclerview"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_2"
-            android:layout_marginLeft="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/line_2" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/trailer_recyclerview"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/review_label_tv"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trailer_label_tv" />
+
+        <ProgressBar
+            android:id="@+id/trailer_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/review_label_tv"
+            app:layout_constraintEnd_toEndOf="@+id/trailer_recyclerview"
+            app:layout_constraintStart_toStartOf="@+id/trailer_recyclerview"
+            app:layout_constraintTop_toBottomOf="@+id/trailer_label_tv" />
+
+        <TextView
+            android:id="@+id/review_label_tv"
+            style="@style/ListLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/reviews"
+            app:layout_constraintBottom_toTopOf="@+id/review_recyclerview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trailer_recyclerview"
+            android:layout_marginLeft="8dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/review_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/review_pb"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/review_recyclerview"
+            app:layout_constraintEnd_toEndOf="@+id/review_recyclerview"
+            app:layout_constraintStart_toStartOf="@+id/review_recyclerview"
+            app:layout_constraintTop_toTopOf="@+id/review_recyclerview" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

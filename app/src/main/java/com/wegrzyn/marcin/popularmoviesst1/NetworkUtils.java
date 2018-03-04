@@ -1,10 +1,14 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +42,9 @@ class NetworkUtils {
     static final int TARGET_HEIGHT = 600;
 
     private static final String SCHEME = "http";
+    private static final String YT_AUTHORITY="youtube.com";
+    private static final String YT_PATH = "watch";
+    private static final String YT_QUERY_PARAM = "v";
     private static final String IMAGE_AUTHORITY = "image.tmdb.org";
     private static final String IMAGE_PATH = "t/p";
     private static final String IMAGE_SIZE_185 = "w185";
@@ -105,6 +112,15 @@ class NetworkUtils {
         return getStringFromUrl(builder);
     }
 
+    static Uri getYtUri(String id){
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(SCHEME);
+        builder.authority(YT_AUTHORITY);
+        builder.path(YT_PATH);
+        builder.appendQueryParameter(YT_QUERY_PARAM,id);
+        return builder.build();
+    }
+
     @Nullable
     private static String getStringFromUrl(Uri.Builder builder) {
         URL urlQuery = createURL(builder.toString());
@@ -166,6 +182,7 @@ class NetworkUtils {
 
     private static List<Movie> jsonArrayMoviesToList(JSONArray array) {
 
+        if(array==null)return null;
         int length = array.length();
         List<Movie> moviesList = new ArrayList<>(length);
 
@@ -190,6 +207,7 @@ class NetworkUtils {
 
     private static List<Trailer> jsonArrayTrailerToList(JSONArray array){
 
+        if(array==null)return null;
         int length = array.length();
         List<Trailer> trailerList = new ArrayList<>(length);
 
@@ -209,6 +227,7 @@ class NetworkUtils {
 
     private static List<Review> jsonArrayReviewToList(JSONArray array){
 
+        if(array==null)return null;
         int length = array.length();
         List<Review> reviewList = new ArrayList<>(length);
 
@@ -242,6 +261,17 @@ class NetworkUtils {
         String jsonString = queryReviewsUrl(id);
         JSONArray jsonArray = parseResults(jsonString);
         return jsonArrayReviewToList(jsonArray);
+    }
+
+    static boolean  isInternetConnections(Context context){
+        boolean connection = false;
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        connection  = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        if(!connection) Toast.makeText(context, R.string.no_internet,Toast.LENGTH_LONG).show();
+        return connection;
     }
 
 }

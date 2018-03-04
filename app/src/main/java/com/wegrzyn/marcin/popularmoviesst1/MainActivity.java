@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.isInternetConnections;
+
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener,
         LoaderManager.LoaderCallbacks<List<Movie>> {
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         adapter = new MoviesAdapter(this, moviesList, this);
         recyclerView.setAdapter(adapter);
 
-        if(isInternetConnections())
+        if(isInternetConnections(this))
             getSupportLoaderManager().initLoader(MoviesLoaderID, null, this);
 
         setActionBarText();
@@ -92,14 +94,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     private void selectTop() {
         popular = false;
-        if(isInternetConnections())
+        if(isInternetConnections(this))
             getSupportLoaderManager().restartLoader(MoviesLoaderID, null, this);
         setActionBarText();
     }
 
     private void selectPopular() {
         popular = true;
-        if(isInternetConnections())
+        if(isInternetConnections(this))
             getSupportLoaderManager().restartLoader(MoviesLoaderID, null, this);
             setActionBarText();
     }
@@ -154,15 +156,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     @Override
     public void onLoaderReset(Loader<List<Movie>> loader) { }
 
-     boolean isInternetConnections(){
-        boolean connection = false;
-        ConnectivityManager cm =
-                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert cm != null;
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        connection  = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        if(!connection)Toast.makeText(this, R.string.no_internet,Toast.LENGTH_LONG).show();
-        return connection;
-    }
+
 
 }

@@ -6,4 +6,7 @@
     <string name="no_internet">has no internet connections !!!</string>
     <string name="trailers">Trailers:</string>
     <string name="play_button">play button</string>
+    <string name="reviews">Reviews:</string>
+    <string name="john">john</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed</string>
 </resources>
