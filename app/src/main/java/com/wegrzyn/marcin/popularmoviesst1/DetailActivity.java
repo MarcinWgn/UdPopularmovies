@@ -1,8 +1,6 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
 import android.content.Intent;
-import android.drm.DrmStore;
-import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -112,7 +110,7 @@ private void initLoaders() {
                 trailersAdapter.setData(data);
                 trailersAdapter.notifyDataSetChanged();
                 trailerProgressBar.setVisibility(View.INVISIBLE);
-                if(data.isEmpty())trailerLabel.setVisibility(View.GONE);
+                if(data==null||data.isEmpty())trailerLabel.setVisibility(View.GONE);
             }
 
             @Override
@@ -133,7 +131,7 @@ private void initLoaders() {
                 reviewsAdapter.setData(data);
                 reviewsAdapter.notifyDataSetChanged();
                 reviewProgressBar.setVisibility(View.INVISIBLE);
-                if(data.isEmpty())reviewLabel.setVisibility(View.GONE);
+                if(data==null||data.isEmpty())reviewLabel.setVisibility(View.GONE);
             }
             @Override
             public void onLoaderReset(Loader<List<Review>> loader) {

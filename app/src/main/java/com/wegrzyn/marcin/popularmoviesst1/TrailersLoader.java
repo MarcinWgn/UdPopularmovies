@@ -12,7 +12,7 @@ import java.util.List;
  * wireamg@gmail.com
  */
 
-public class TrailersLoader extends AsyncTaskLoader<List<Trailer>> {
+class TrailersLoader extends AsyncTaskLoader<List<Trailer>> {
 
     private final String id;
 

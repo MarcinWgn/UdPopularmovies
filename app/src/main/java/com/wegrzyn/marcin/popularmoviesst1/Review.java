@@ -5,7 +5,7 @@ package com.wegrzyn.marcin.popularmoviesst1;
  * wireamg@gmail.com
  */
 
-public class Review {
+class Review {
 
     private String author;
     private String content;

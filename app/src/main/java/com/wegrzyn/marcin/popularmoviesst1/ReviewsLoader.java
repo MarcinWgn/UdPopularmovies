@@ -1,6 +1,5 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
  * wireamg@gmail.com
  */
 
-public class ReviewsLoader extends android.support.v4.content.AsyncTaskLoader<List<Review>> {
+class ReviewsLoader extends android.support.v4.content.AsyncTaskLoader<List<Review>> {
 
     private final String id;
 

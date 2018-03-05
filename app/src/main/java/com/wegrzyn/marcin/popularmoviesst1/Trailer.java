@@ -5,7 +5,7 @@ package com.wegrzyn.marcin.popularmoviesst1;
  * wireamg@gmail.com
  */
 
-public class Trailer {
+class Trailer {
 
     private String name;
     private String key;

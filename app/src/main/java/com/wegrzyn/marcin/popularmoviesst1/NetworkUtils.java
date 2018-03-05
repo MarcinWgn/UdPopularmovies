@@ -264,7 +264,7 @@ class NetworkUtils {
     }
 
     static boolean  isInternetConnections(Context context){
-        boolean connection = false;
+        boolean connection;
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert cm != null;

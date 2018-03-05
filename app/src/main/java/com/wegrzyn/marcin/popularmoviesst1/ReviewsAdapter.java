@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static android.support.v7.widget.RecyclerView.*;
-
 /**
  * Created by Marcin Węgrzyn on 04.03.2018.
  * wireamg@gmail.com
