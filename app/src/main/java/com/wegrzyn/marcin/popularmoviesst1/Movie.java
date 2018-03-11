@@ -17,12 +17,14 @@ class Movie implements Parcelable {
     private final String voteAverage;
     private final String plotSynopsis;
 
+    private final static String FOR_TEN = "/10";
+
     Movie(String id, String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
         this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;
         this.posterLocalization = posterLocalization;
-        this.voteAverage = voteAverage;
+        this.voteAverage = voteAverage+FOR_TEN;
         this.plotSynopsis = plotSynopsis;
     }
 
@@ -73,7 +75,6 @@ class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeString(id);
         dest.writeString(title);
         dest.writeString(releaseDate);

@@ -18,11 +18,13 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorGreyLight"
             android:padding="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/detail_poster_IW"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -44,13 +46,15 @@
             android:id="@+id/detail_poster_IW"
             android:layout_width="150dp"
             android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
             android:contentDescription="@string/movie_poster"
+            app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-            tools:background="@tools:sample/avatars" />
+            tools:background="@tools:sample/avatars"
+            android:layout_marginRight="8dp" />
 
 
         <TextView
@@ -78,20 +82,22 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textAllCaps="true"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/detail_release_date_TV"
             app:layout_constraintStart_toStartOf="@+id/detail_release_date_TV"
             app:layout_constraintTop_toBottomOf="@+id/detail_release_date_TV"
-            tools:text="8.1" />
+            tools:text="8.1/10" />
 
         <TextView
             android:id="@+id/detail_plot_synopsis_TV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/line_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/line" />
@@ -102,6 +108,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/detail_plot_synopsis_TV"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_poster_IW" />
@@ -109,9 +116,10 @@
         <View
             android:id="@+id/line_2"
             style="@style/LineHorizontal"
+            android:layout_marginBottom="15dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/trailer_label_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_plot_synopsis_TV" />
@@ -121,14 +129,15 @@
             style="@style/ListLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/trailers"
             app:layout_constraintBottom_toTopOf="@+id/trailer_recyclerview"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_2" />
+            app:layout_constraintTop_toBottomOf="@+id/line_2"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            android:layout_marginLeft="8dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/trailer_recyclerview"
@@ -137,7 +146,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@+id/review_label_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -163,7 +172,7 @@
             style="@style/ListLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/reviews"
@@ -179,19 +188,22 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_label_tv" />
 
         <ProgressBar
             android:id="@+id/review_pb"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/review_recyclerview"
             app:layout_constraintEnd_toEndOf="@+id/review_recyclerview"
             app:layout_constraintStart_toStartOf="@+id/review_recyclerview"

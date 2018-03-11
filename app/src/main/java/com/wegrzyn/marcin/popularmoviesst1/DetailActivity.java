@@ -24,8 +24,8 @@ import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.isInternetConnect
 
 public class DetailActivity extends AppCompatActivity implements TrailersAdapter.ListItemClickListener {
 
-    private final static int TRAILER_LOADER_ID = 2;
-    private final static int REVIEW_LOADER_ID = 3;
+    private final static int TRAILER_LOADER_ID = 40;
+    private final static int REVIEW_LOADER_ID = 50;
 
     private String idMovie;
     private List<Trailer> trailerList = new ArrayList<>();
