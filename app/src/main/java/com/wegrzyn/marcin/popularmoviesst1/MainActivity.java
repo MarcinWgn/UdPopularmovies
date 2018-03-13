@@ -4,8 +4,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
 import com.wegrzyn.marcin.popularmoviesst1.data.MoviesDbHelper;
 
 import java.util.ArrayList;
@@ -35,7 +34,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     public static final String ITEM_MOVIE = "item_movie";
 
-    private static final int MoviesLoaderID = 30;
+    private static final int MOVIES_LOADER_ID = 30;
+    private static final int MOVIES_BASE_LOADER = 40;
+
     public static final String REQ_CATEGORY = "req_category";
     private List<Movie> moviesList = new ArrayList<>(20);
 
@@ -43,52 +44,19 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private ProgressBar progressBar;
 
     private static final int REQUEST_TOP = 0;
-    public static final int REQUEST_POPULAR = 1;
-    public static final int REQUEST_FAVORITE = 2;
+    private static final int REQUEST_POPULAR = 1;
+    private static final int REQUEST_FAVORITE = 2;
 
     private int requestCategory = REQUEST_TOP;
 
 
     private void testBase(){
         MoviesDbHelper dbHelper = new MoviesDbHelper(this);
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieEntry.ID_MOVIE,"12345");
-        contentValues.put(MovieEntry.TITLE,"jakis tytul");
-        contentValues.put(MovieEntry.PLOT_SYNOPSIS,"plot");
-        contentValues.put(MovieEntry.POSTER_LOCAL,"p_local");
-        contentValues.put(MovieEntry.RELASE_DATE,"date");
-        contentValues.put(MovieEntry.VOTE_AVERAGE,"vote");
-
+        ContentValues contentValues = moviesList.get(9).getContentValues();
         Uri answ = getContentResolver().insert(MovieEntry.CONTENT_URI,contentValues);
         Log.d(TAG, "dodano do bazy: "+answ.toString());
     }
 
-    private void testProvider(){
-
-        String [] selectedColumn ={
-                MovieEntry._ID,
-                MovieEntry.TITLE
-        };
-        Log.d(TAG,"CONTENT _URI: "+MovieEntry.CONTENT_URI);
-//       Cursor cursor =  getContentResolver().query(MovieEntry.CONTENT_URI,
-//               selectedColumn,null,null,null);
-
-        Uri uri = ContentUris.withAppendedId(MovieEntry.CONTENT_URI,5);
-
-        Cursor cursor = getContentResolver().query(uri,selectedColumn,null,null,null);
-        String out = "";
-
-        if(cursor.moveToFirst()){
-            do {
-                out +="\n"+String.valueOf(cursor.getInt(cursor.getColumnIndex(MovieEntry._ID)))
-                        +" "+cursor.getString(cursor.getColumnIndex(MovieEntry.TITLE));
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        Log.d(TAG, " Odczytano z bazy: "+ out);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,12 +78,19 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         adapter = new MoviesAdapter(this, moviesList, this);
         recyclerView.setAdapter(adapter);
 
-        if(isInternetConnections(this))
-            getSupportLoaderManager().initLoader(MoviesLoaderID, null, this);
-
+        if(isInternetConnections(this)){
+            if(requestCategory==REQUEST_FAVORITE){
+                getSupportLoaderManager().initLoader(MOVIES_BASE_LOADER,null, this);
+            } else getSupportLoaderManager().initLoader(MOVIES_LOADER_ID,null, this);
+        }
         setActionBarText();
-        testBase();
-        testProvider();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG,"Request category: "+String.valueOf(requestCategory));
     }
 
     @Override
@@ -147,20 +122,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private void selectTop() {
         requestCategory = REQUEST_TOP;
         if(isInternetConnections(this))
-            getSupportLoaderManager().restartLoader(MoviesLoaderID, null, this);
+            getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
         setActionBarText();
     }
 
     private void selectPopular() {
         requestCategory = REQUEST_POPULAR;
         if(isInternetConnections(this))
-            getSupportLoaderManager().restartLoader(MoviesLoaderID, null, this);
+            getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
             setActionBarText();
     }
     private void selectFavorite(){
         requestCategory = REQUEST_FAVORITE;
         if (getSupportActionBar() != null){
-            getSupportActionBar().setTitle(R.string.favorite);
+            getSupportLoaderManager().restartLoader(MOVIES_BASE_LOADER,null,this);
+            setActionBarText();
         }
 
     }
@@ -178,17 +154,29 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         startActivity(intent);
     }
 
+
+    @NonNull
     @Override
     public Loader<List<Movie>> onCreateLoader(int id, Bundle args) {
 
-        Log.d(TAG,"onCreateLoader");
+        Log.d(TAG, "onCreateLoader");
         progressBar.setVisibility(View.VISIBLE);
-        if (requestCategory==REQUEST_POPULAR) {
-            return new MoviesLoader(this, NetworkUtils.POPULAR_QUERY);
-        } else if (requestCategory==REQUEST_TOP){
-            return new MoviesLoader(this, NetworkUtils.TOP_RATED_QUERY);
+
+        switch (id) {
+            case MOVIES_LOADER_ID:
+                if (requestCategory == REQUEST_POPULAR) {
+                    return new MoviesLoader(this, NetworkUtils.POPULAR_QUERY);
+                } else if (requestCategory == REQUEST_TOP) {
+                    return new MoviesLoader(this, NetworkUtils.TOP_RATED_QUERY);
+                }
+                break;
+            case MOVIES_BASE_LOADER:
+                if (requestCategory == REQUEST_FAVORITE) {
+                    return new MoviesDataBaseLoader(this);
+                }
+                break;
         }
-        return null;
+        return new MoviesDataBaseLoader(this);
     }
 
     private void setActionBarText() {
@@ -205,21 +193,20 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
                 getSupportActionBar().setTitle(R.string.favorite);
             }
         }
-        // TODO: 05.03.2018 tutaj dodaj zapytanie do bazy
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
+    public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
         moviesList = data;
         adapter.setData(moviesList);
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
+
         Log.d(TAG,"onLoadFinished");
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Movie>> loader) { }
-
+    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) { }
 
 
 }

@@ -1,7 +1,10 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
 
 /**
  * Created by Marcin Węgrzyn on 20.02.2018.
@@ -18,6 +21,7 @@ class Movie implements Parcelable {
     private final String plotSynopsis;
 
     private final static String FOR_TEN = "/10";
+
 
     Movie(String id, String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
         this.id = id;
@@ -81,5 +85,18 @@ class Movie implements Parcelable {
         dest.writeString(posterLocalization);
         dest.writeString(voteAverage);
         dest.writeString(plotSynopsis);
+    }
+
+    ContentValues getContentValues(){
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieContract.MovieEntry.ID_MOVIE,id);
+        contentValues.put(MovieContract.MovieEntry.TITLE,title);
+        contentValues.put(MovieContract.MovieEntry.PLOT_SYNOPSIS,plotSynopsis);
+        contentValues.put(MovieContract.MovieEntry.POSTER_LOCAL,posterLocalization);
+        contentValues.put(MovieContract.MovieEntry.RELASE_DATE,releaseDate);
+        contentValues.put(MovieContract.MovieEntry.VOTE_AVERAGE,voteAverage);
+
+        return contentValues;
     }
 }
