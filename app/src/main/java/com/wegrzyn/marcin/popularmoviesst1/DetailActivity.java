@@ -1,7 +1,13 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +15,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
+import com.wegrzyn.marcin.popularmoviesst1.data.MoviesDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +46,17 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     private ProgressBar reviewProgressBar;
     private TextView trailerLabel;
     private TextView reviewLabel;
+    private ImageButton favImageButton;
+    private Movie movie;
+
+    private boolean isFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        TextView title = findViewById(R.id.detail_title_TV);
+        final TextView title = findViewById(R.id.detail_title_TV);
         TextView synopsis = findViewById(R.id.detail_plot_synopsis_TV);
         TextView rating = findViewById(R.id.detail_rating_TV);
         TextView date = findViewById(R.id.detail_release_date_TV);
@@ -50,12 +64,15 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         reviewProgressBar = findViewById(R.id.review_pb);
         trailerLabel = findViewById(R.id.trailer_label_tv);
         reviewLabel = findViewById(R.id.review_label_tv);
+        favImageButton = findViewById(R.id.favorite_ib);
 
         ImageView poster = findViewById(R.id.detail_poster_IW);
 
 
+
+
         if (getIntent().hasExtra(MainActivity.ITEM_MOVIE)) {
-            Movie movie = getIntent().getParcelableExtra(MainActivity.ITEM_MOVIE);
+            movie = getIntent().getParcelableExtra(MainActivity.ITEM_MOVIE);
 
             idMovie = movie.getId();
             Log.d(NetworkUtils.TAG,"id= "+ idMovie);
@@ -93,11 +110,51 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         reviewsAdapter = new ReviewsAdapter(reviewList,this);
         reviewsRecyclerView.setAdapter(reviewsAdapter);
 
+        favImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFavorite();
+                checkFavorite();
+            }
+        });
+
+        checkFavorite();
 }
 
+private void setFavorite(){
+        if(isFavorite){
+            Uri uriDbMovie = MovieContract.getUriMovie(movie.getId());
+            int i =getContentResolver().delete(uriDbMovie,null,null);
+            Log.d(NetworkUtils.TAG, "skasowane: "+String.valueOf(i));
+        }else{
+            MoviesDbHelper dbHelper = new MoviesDbHelper(getBaseContext());
+            ContentValues contentValues = movie.getContentValues();
+            Uri answ = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
+            Log.d(NetworkUtils.TAG, "dodano do bazy: "+answ);
+        }
+}
+
+private void checkFavorite(){
+
+     final String [] selectedColumn ={
+            MovieContract.MovieEntry.ID_MOVIE
+    };
+    Uri uriDbMovie = MovieContract.getUriMovie(movie.getId());
+    Cursor cursor = getBaseContext().getContentResolver().query(uriDbMovie,selectedColumn,null,null,null);
+    Drawable drawable;
+    if(cursor!=null && cursor.getCount()>0){
+        drawable = ContextCompat.getDrawable(this,android.R.drawable.btn_star_big_on);
+        isFavorite = true;
+    }else {
+        drawable =  ContextCompat.getDrawable(this,android.R.drawable.btn_star_big_off);
+        isFavorite = false;
+    }
+    favImageButton.setBackground(drawable);
+}
 
 private void initLoaders() {
         getSupportLoaderManager().initLoader(TRAILER_LOADER_ID, null, new LoaderManager.LoaderCallbacks<List<Trailer>>() {
+            @NonNull
             @Override
             public Loader<List<Trailer>> onCreateLoader(int id, Bundle args) {
                 trailerProgressBar.setVisibility(View.VISIBLE);
@@ -105,7 +162,7 @@ private void initLoaders() {
             }
 
             @Override
-            public void onLoadFinished(Loader<List<Trailer>> loader, List<Trailer> data) {
+            public void onLoadFinished(@NonNull Loader<List<Trailer>> loader, List<Trailer> data) {
                 trailerList=data;
                 trailersAdapter.setData(data);
                 trailersAdapter.notifyDataSetChanged();
@@ -114,11 +171,12 @@ private void initLoaders() {
             }
 
             @Override
-            public void onLoaderReset(Loader<List<Trailer>> loader) {
+            public void onLoaderReset(@NonNull Loader<List<Trailer>> loader) {
 
             }
         });
         getSupportLoaderManager().initLoader(REVIEW_LOADER_ID, null, new LoaderManager.LoaderCallbacks<List<Review>>() {
+            @NonNull
             @Override
             public Loader<List<Review>> onCreateLoader(int id, Bundle args) {
                 reviewProgressBar.setVisibility(View.VISIBLE);
@@ -126,7 +184,7 @@ private void initLoaders() {
             }
 
             @Override
-            public void onLoadFinished(Loader<List<Review>> loader, List<Review> data) {
+            public void onLoadFinished(@NonNull Loader<List<Review>> loader, List<Review> data) {
                 reviewList=data;
                 reviewsAdapter.setData(data);
                 reviewsAdapter.notifyDataSetChanged();
@@ -134,7 +192,7 @@ private void initLoaders() {
                 if(data==null||data.isEmpty())reviewLabel.setVisibility(View.GONE);
             }
             @Override
-            public void onLoaderReset(Loader<List<Review>> loader) {
+            public void onLoaderReset(@NonNull Loader<List<Review>> loader) {
 
             }
         });

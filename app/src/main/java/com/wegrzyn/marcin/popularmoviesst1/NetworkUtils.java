@@ -32,6 +32,10 @@ class NetworkUtils {
 
     static final String TAG = NetworkUtils.class.getSimpleName();
 
+    static final int REQUEST_TOP = 0;
+    static final int REQUEST_POPULAR = 1;
+    static final int REQUEST_FAVORITE = 2;
+
     static final String POPULAR_QUERY = "popular";
     static final String TOP_RATED_QUERY = "top_rated";
 

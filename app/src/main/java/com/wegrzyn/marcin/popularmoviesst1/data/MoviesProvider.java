@@ -58,8 +58,7 @@ public class MoviesProvider extends ContentProvider {
                         ,selectionArgs,null,null,sortOrder);
                 break;
             case ID_MOVIE:
-                selection = MovieContract.MovieEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                selection = MovieContract.MovieEntry.ID_MOVIE + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(MovieContract.MovieEntry.TABLE_NAME,projection,selection
                         ,selectionArgs,null,null,sortOrder);
@@ -105,7 +104,30 @@ public class MoviesProvider extends ContentProvider {
     }
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+
+        final int match = URI_MATCHER.match(uri);
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        int deleteRows;
+
+        switch (match){
+            case MOVIES:
+                deleteRows = database.delete(MovieContract.MovieEntry.TABLE_NAME,selection,selectionArgs);
+                break;
+            case  ID_MOVIE:
+                selection = MovieContract.MovieEntry.ID_MOVIE + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                deleteRows = database.delete(MovieContract.MovieEntry.TABLE_NAME,selection, selectionArgs);
+                break;
+
+                default:
+                    throw new IllegalArgumentException("not support for: " + uri);
+        }
+        if(deleteRows != 0){
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+
+        return deleteRows;
     }
 
     @Override

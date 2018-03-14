@@ -18,12 +18,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.wegrzyn.marcin.popularmoviesst1.data.MoviesDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.REQUEST_FAVORITE;
+import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.REQUEST_POPULAR;
+import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.REQUEST_TOP;
 import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.isInternetConnections;
 import static com.wegrzyn.marcin.popularmoviesst1.data.MovieContract.*;
 
@@ -42,20 +46,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     private MoviesAdapter adapter;
     private ProgressBar progressBar;
-
-    private static final int REQUEST_TOP = 0;
-    private static final int REQUEST_POPULAR = 1;
-    private static final int REQUEST_FAVORITE = 2;
-
+    
     private int requestCategory = REQUEST_TOP;
-
-
-    private void testBase(){
-        MoviesDbHelper dbHelper = new MoviesDbHelper(this);
-        ContentValues contentValues = moviesList.get(9).getContentValues();
-        Uri answ = getContentResolver().insert(MovieEntry.CONTENT_URI,contentValues);
-        Log.d(TAG, "dodano do bazy: "+answ.toString());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +70,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         adapter = new MoviesAdapter(this, moviesList, this);
         recyclerView.setAdapter(adapter);
 
-        if(isInternetConnections(this)){
             if(requestCategory==REQUEST_FAVORITE){
                 getSupportLoaderManager().initLoader(MOVIES_BASE_LOADER,null, this);
-            } else getSupportLoaderManager().initLoader(MOVIES_LOADER_ID,null, this);
-        }
+            } else if(requestCategory==REQUEST_TOP||requestCategory==REQUEST_POPULAR) {
+                getSupportLoaderManager().initLoader(MOVIES_LOADER_ID,null, this);
+            }
+
+        internetToast();
+
         setActionBarText();
 
+    }
+
+    private void internetToast() {
+        if(!isInternetConnections(this))
+            Toast.makeText(this,getText(R.string.no_internet),Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -121,14 +121,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     }
     private void selectTop() {
         requestCategory = REQUEST_TOP;
-        if(isInternetConnections(this))
             getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
         setActionBarText();
     }
 
     private void selectPopular() {
         requestCategory = REQUEST_POPULAR;
-        if(isInternetConnections(this))
             getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
             setActionBarText();
     }
@@ -161,17 +159,20 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
         Log.d(TAG, "onCreateLoader");
         progressBar.setVisibility(View.VISIBLE);
-
+        internetToast();
         switch (id) {
             case MOVIES_LOADER_ID:
                 if (requestCategory == REQUEST_POPULAR) {
+                    Log.d(TAG, "onCreateLoader popular");
                     return new MoviesLoader(this, NetworkUtils.POPULAR_QUERY);
                 } else if (requestCategory == REQUEST_TOP) {
+                    Log.d(TAG, "onCreateLoader top");
                     return new MoviesLoader(this, NetworkUtils.TOP_RATED_QUERY);
                 }
                 break;
             case MOVIES_BASE_LOADER:
                 if (requestCategory == REQUEST_FAVORITE) {
+                    Log.d(TAG, "onCreateLoader favorite");
                     return new MoviesDataBaseLoader(this);
                 }
                 break;
@@ -197,16 +198,17 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
+
         moviesList = data;
         adapter.setData(moviesList);
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
-
-        Log.d(TAG,"onLoadFinished");
+        Log.d(TAG,"onLoadFinished"+loader.getId());
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) { }
-
+    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
+        Log.d(TAG,"reset loader");
+    }
 
 }

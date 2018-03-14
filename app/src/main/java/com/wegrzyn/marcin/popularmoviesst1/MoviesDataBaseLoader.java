@@ -45,6 +45,7 @@ public class MoviesDataBaseLoader extends AsyncTaskLoader<List<Movie>> {
                 null,null,null);
 
         if (cursor != null && cursor.moveToFirst()) {
+            movieList.clear();
             do {
                 String idMovie = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.ID_MOVIE));
                 String title = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.TITLE));

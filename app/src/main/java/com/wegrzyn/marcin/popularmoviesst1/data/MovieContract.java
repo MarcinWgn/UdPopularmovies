@@ -39,4 +39,8 @@ public class MovieContract {
         public static final String PLOT_SYNOPSIS="plot_synopsis";
         public static final String TABLE_NAME="movies";
     }
+
+    public static Uri getUriMovie(String idMovie){
+        return Uri.withAppendedPath(MovieContract.MovieEntry.CONTENT_URI,idMovie);
+    }
 }
