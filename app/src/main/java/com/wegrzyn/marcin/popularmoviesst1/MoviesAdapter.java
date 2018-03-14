@@ -1,6 +1,7 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +32,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         this.itemClickListener = itemClickListener;
     }
 
+    @NonNull
     @Override
-    public MoviesAdapter.MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MoviesAdapter.MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false);
 
@@ -40,7 +42,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     }
 
     @Override
-    public void onBindViewHolder(MoviesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
 
         Picasso.with(context)
                 .load(getImageUri(listMovie.get(position).getPosterLocalization()))

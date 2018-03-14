@@ -1,10 +1,6 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -20,8 +16,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.wegrzyn.marcin.popularmoviesst1.data.MoviesDbHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +23,6 @@ import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.REQUEST_FAVORITE;
 import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.REQUEST_POPULAR;
 import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.REQUEST_TOP;
 import static com.wegrzyn.marcin.popularmoviesst1.NetworkUtils.isInternetConnections;
-import static com.wegrzyn.marcin.popularmoviesst1.data.MovieContract.*;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener,
         LoaderManager.LoaderCallbacks<List<Movie>> {
@@ -39,14 +32,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     public static final String ITEM_MOVIE = "item_movie";
 
     private static final int MOVIES_LOADER_ID = 30;
-    private static final int MOVIES_BASE_LOADER = 40;
 
-    public static final String REQ_CATEGORY = "req_category";
+    private static final String REQ_CATEGORY = "req_category";
     private List<Movie> moviesList = new ArrayList<>(20);
 
     private MoviesAdapter adapter;
     private ProgressBar progressBar;
-    
+
     private int requestCategory = REQUEST_TOP;
 
     @Override
@@ -70,11 +62,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         adapter = new MoviesAdapter(this, moviesList, this);
         recyclerView.setAdapter(adapter);
 
-            if(requestCategory==REQUEST_FAVORITE){
-                getSupportLoaderManager().initLoader(MOVIES_BASE_LOADER,null, this);
-            } else if(requestCategory==REQUEST_TOP||requestCategory==REQUEST_POPULAR) {
                 getSupportLoaderManager().initLoader(MOVIES_LOADER_ID,null, this);
-            }
+
 
         internetToast();
 
@@ -85,12 +74,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private void internetToast() {
         if(!isInternetConnections(this))
             Toast.makeText(this,getText(R.string.no_internet),Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG,"Request category: "+String.valueOf(requestCategory));
     }
 
     @Override
@@ -133,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private void selectFavorite(){
         requestCategory = REQUEST_FAVORITE;
         if (getSupportActionBar() != null){
-            getSupportLoaderManager().restartLoader(MOVIES_BASE_LOADER,null,this);
+            getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID,null,this);
             setActionBarText();
         }
 
@@ -160,24 +143,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         Log.d(TAG, "onCreateLoader");
         progressBar.setVisibility(View.VISIBLE);
         internetToast();
-        switch (id) {
-            case MOVIES_LOADER_ID:
+
                 if (requestCategory == REQUEST_POPULAR) {
                     Log.d(TAG, "onCreateLoader popular");
-                    return new MoviesLoader(this, NetworkUtils.POPULAR_QUERY);
+                    return new MoviesLoader(this, REQUEST_POPULAR);
                 } else if (requestCategory == REQUEST_TOP) {
                     Log.d(TAG, "onCreateLoader top");
-                    return new MoviesLoader(this, NetworkUtils.TOP_RATED_QUERY);
-                }
-                break;
-            case MOVIES_BASE_LOADER:
-                if (requestCategory == REQUEST_FAVORITE) {
+                    return new MoviesLoader(this, REQUEST_TOP);
+                }else if (requestCategory == REQUEST_FAVORITE) {
                     Log.d(TAG, "onCreateLoader favorite");
-                    return new MoviesDataBaseLoader(this);
+                    return new MoviesLoader(this,REQUEST_FAVORITE);
                 }
-                break;
-        }
-        return new MoviesDataBaseLoader(this);
+        return new MoviesLoader(this,REQUEST_FAVORITE);
     }
 
     private void setActionBarText() {
@@ -198,17 +175,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
-
         moviesList = data;
         adapter.setData(moviesList);
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
-        Log.d(TAG,"onLoadFinished"+loader.getId());
+        Log.d(TAG,"onLoadFinished");
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
-        Log.d(TAG,"reset loader");
     }
 
 }

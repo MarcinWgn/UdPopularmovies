@@ -7,8 +7,8 @@ package com.wegrzyn.marcin.popularmoviesst1;
 
 class Review {
 
-    private String author;
-    private String content;
+    private final String author;
+    private final String content;
 
     Review(String author, String content) {
         this.author = author;

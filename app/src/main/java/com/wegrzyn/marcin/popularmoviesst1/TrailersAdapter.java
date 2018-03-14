@@ -2,6 +2,7 @@ package com.wegrzyn.marcin.popularmoviesst1;
 
 import android.content.Context;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,14 +34,15 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         this.mItemClickListener = mItemClickListener;
     }
 
+    @NonNull
     @Override
-    public TrailersAdapter.TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrailersAdapter.TrailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_trailer,parent,false);
         return new TrailerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(TrailerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TrailerViewHolder holder, int position) {
         holder.title.setText(trailerList.get(position).getName());
     }
 
@@ -52,7 +54,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView title;
+        final TextView title;
 
         TrailerViewHolder(View itemView) {
             super(itemView);

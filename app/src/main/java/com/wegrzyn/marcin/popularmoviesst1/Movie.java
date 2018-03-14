@@ -11,7 +11,7 @@ import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
  * wireamg@gmail.com
  */
 
-class Movie implements Parcelable {
+ class Movie implements Parcelable {
 
     private final String id;
     private final String title;
@@ -23,7 +23,7 @@ class Movie implements Parcelable {
     private final static String FOR_TEN = "/10";
 
 
-    Movie(String id, String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
+    public Movie(String id, String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
         this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;

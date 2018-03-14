@@ -7,10 +7,10 @@ package com.wegrzyn.marcin.popularmoviesst1;
 
 class Trailer {
 
-    private String name;
-    private String key;
+    private final String name;
+    private final String key;
 
-    public Trailer(String name, String key) {
+    Trailer(String name, String key) {
         this.name = name;
         this.key = key;
     }
@@ -19,7 +19,7 @@ class Trailer {
         return name;
     }
 
-    public String getKey() {
+    String getKey() {
         return key;
     }
 }

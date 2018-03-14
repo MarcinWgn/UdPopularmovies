@@ -19,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
@@ -127,7 +126,6 @@ private void setFavorite(){
             int i =getContentResolver().delete(uriDbMovie,null,null);
             Log.d(NetworkUtils.TAG, "skasowane: "+String.valueOf(i));
         }else{
-            MoviesDbHelper dbHelper = new MoviesDbHelper(getBaseContext());
             ContentValues contentValues = movie.getContentValues();
             Uri answ = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
             Log.d(NetworkUtils.TAG, "dodano do bazy: "+answ);
@@ -148,6 +146,9 @@ private void checkFavorite(){
     }else {
         drawable =  ContextCompat.getDrawable(this,android.R.drawable.btn_star_big_off);
         isFavorite = false;
+    }
+    if (cursor != null) {
+        cursor.close();
     }
     favImageButton.setBackground(drawable);
 }

@@ -1,6 +1,7 @@
 package com.wegrzyn.marcin.popularmoviesst1;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +25,15 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public ReviewsAdapter.ReviewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewsAdapter.ReviewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_review,parent,false);
         return new ReviewsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ReviewsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReviewsViewHolder holder, int position) {
         holder.author.setText(reviewList.get(position).getAuthor());
         holder.content.setText(reviewList.get(position).getContent());
 
@@ -45,8 +47,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
 
     class ReviewsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView author;
-        TextView content;
+        final TextView author;
+        final TextView content;
 
         ReviewsViewHolder(View itemView) {
             super(itemView);

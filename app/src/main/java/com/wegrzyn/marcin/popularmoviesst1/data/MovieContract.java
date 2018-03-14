@@ -37,7 +37,7 @@ public class MovieContract {
         public static final String POSTER_LOCAL="poster_local";
         public static final String VOTE_AVERAGE="vote_average";
         public static final String PLOT_SYNOPSIS="plot_synopsis";
-        public static final String TABLE_NAME="movies";
+        static final String TABLE_NAME="movies";
     }
 
     public static Uri getUriMovie(String idMovie){
