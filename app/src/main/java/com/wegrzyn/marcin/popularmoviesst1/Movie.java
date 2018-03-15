@@ -20,15 +20,14 @@ import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
     private final String voteAverage;
     private final String plotSynopsis;
 
-    private final static String FOR_TEN = "/10";
 
 
-    public Movie(String id, String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
+    Movie(String id, String title, String releaseDate, String posterLocalization, String voteAverage, String plotSynopsis) {
         this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;
         this.posterLocalization = posterLocalization;
-        this.voteAverage = voteAverage+FOR_TEN;
+        this.voteAverage = voteAverage;
         this.plotSynopsis = plotSynopsis;
     }
 
@@ -94,7 +93,7 @@ import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
         contentValues.put(MovieContract.MovieEntry.TITLE,title);
         contentValues.put(MovieContract.MovieEntry.PLOT_SYNOPSIS,plotSynopsis);
         contentValues.put(MovieContract.MovieEntry.POSTER_LOCAL,posterLocalization);
-        contentValues.put(MovieContract.MovieEntry.RELASE_DATE,releaseDate);
+        contentValues.put(MovieContract.MovieEntry.RELEASE_DATE,releaseDate);
         contentValues.put(MovieContract.MovieEntry.VOTE_AVERAGE,voteAverage);
 
         return contentValues;

@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract;
-import com.wegrzyn.marcin.popularmoviesst1.data.MoviesDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,12 +122,10 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 private void setFavorite(){
         if(isFavorite){
             Uri uriDbMovie = MovieContract.getUriMovie(movie.getId());
-            int i =getContentResolver().delete(uriDbMovie,null,null);
-            Log.d(NetworkUtils.TAG, "skasowane: "+String.valueOf(i));
+            getContentResolver().delete(uriDbMovie,null,null);
         }else{
             ContentValues contentValues = movie.getContentValues();
-            Uri answ = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
-            Log.d(NetworkUtils.TAG, "dodano do bazy: "+answ);
+            getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
         }
 }
 

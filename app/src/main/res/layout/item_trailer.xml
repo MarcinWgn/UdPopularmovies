@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:id="@+id/item_trailer_lbel_iv"
+        android:id="@+id/item_trailer_label_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,10 +26,10 @@
         android:layout_marginStart="8dp"
         android:gravity="start"
         android:textAlignment="textStart"
-        app:layout_constraintBottom_toBottomOf="@+id/item_trailer_lbel_iv"
+        app:layout_constraintBottom_toBottomOf="@+id/item_trailer_label_iv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/item_trailer_lbel_iv"
-        app:layout_constraintTop_toTopOf="@+id/item_trailer_lbel_iv"
+        app:layout_constraintStart_toEndOf="@+id/item_trailer_label_iv"
+        app:layout_constraintTop_toTopOf="@+id/item_trailer_label_iv"
         tools:text="Trailer 1"
         android:layout_marginLeft="8dp" />
 
@@ -43,6 +43,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_trailer_lbel_iv" />
+        app:layout_constraintTop_toBottomOf="@+id/item_trailer_label_iv" />
 
 </android.support.constraint.ConstraintLayout>

@@ -78,16 +78,15 @@
             android:id="@+id/detail_rating_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/detail_release_date_TV"
             app:layout_constraintStart_toStartOf="@+id/detail_release_date_TV"
             app:layout_constraintTop_toBottomOf="@+id/detail_release_date_TV"
-            tools:text="8.1/10" />
+            tools:text="8.1"
+            android:layout_marginLeft="16dp" />
 
         <TextView
             android:id="@+id/detail_plot_synopsis_TV"
@@ -223,6 +222,21 @@
             app:layout_constraintStart_toStartOf="@+id/detail_release_date_TV"
             app:layout_constraintTop_toBottomOf="@+id/detail_rating_TV"
             android:contentDescription="@string/favorite" />
+
+        <TextView
+            android:id="@+id/raring_label_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/_10"
+            android:textAllCaps="true"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_rating_TV"
+            app:layout_constraintEnd_toEndOf="@+id/detail_release_date_TV"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/detail_rating_TV"
+            android:layout_marginRight="8dp" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

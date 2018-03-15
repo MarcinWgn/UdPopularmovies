@@ -10,7 +10,7 @@ import com.wegrzyn.marcin.popularmoviesst1.data.MovieContract.MovieEntry;
  * wireamg@gmail.com
  */
 
-public class MoviesDbHelper extends SQLiteOpenHelper {
+class MoviesDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "movies.db";
     private static final int DATABASE_VERSION = 1;
@@ -27,7 +27,7 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 //                +MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +MovieEntry.ID_MOVIE + " TEXT PRIMARY KEY, "
                 +MovieEntry.TITLE+ " TEXT NOT NULL, "
-                +MovieEntry.RELASE_DATE+ " TEXT NOT NULL, "
+                +MovieEntry.RELEASE_DATE + " TEXT NOT NULL, "
                 +MovieEntry.POSTER_LOCAL+ " TEXT NOT NULL, "
                 +MovieEntry.VOTE_AVERAGE+ " TEXT NOT NULL, "
                 +MovieEntry.PLOT_SYNOPSIS+ " TEXT NOT NULL"

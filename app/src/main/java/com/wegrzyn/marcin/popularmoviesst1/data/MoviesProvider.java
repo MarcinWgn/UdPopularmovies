@@ -18,10 +18,10 @@ import android.support.annotation.Nullable;
 public class MoviesProvider extends ContentProvider {
 
 
-    public static final int MOVIES = 100;
-    public static final int ID_MOVIE = 101;
+    private static final int MOVIES = 100;
+    private static final int ID_MOVIE = 101;
 
-    public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
 
@@ -46,7 +46,7 @@ public class MoviesProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();
-        Cursor cursor = null;
+        Cursor cursor;
 
 
         int match = URI_MATCHER.match(uri);

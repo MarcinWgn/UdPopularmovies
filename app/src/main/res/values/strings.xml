@@ -8,6 +8,6 @@
     <string name="play_button">play button</string>
     <string name="reviews">Reviews:</string>
     <string name="john">john</string>
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed</string>
     <string name="favorite">Favorite</string>
+    <string name="_10">/10</string>
 </resources>
